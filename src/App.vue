@@ -60,10 +60,11 @@
     // mobile
     .layout-logo {
       cursor: pointer;
+      position: relative;
+      transition: width 0.2s cubic-bezier(0.34, 0.69, 0.1, 1);
     }
-    .layout-mobile .layout-logo {
-      width: auto !important;
-      white-space: nowrap;
+    .layout-mobile .layout-logo__warp {
+      display: none;
     }
     &:not([arco-theme='dark']) {
       .layout-content {
@@ -81,6 +82,10 @@
         padding: 0;
       }
       // desktop menu
+      .layout-logo__icon-logo {
+        color: rgba(#fff, 0.65);
+        font-size: 18px;
+      }
       .arco-menu-light.layout-menu {
         background: @sideThemeColor;
         // menu content

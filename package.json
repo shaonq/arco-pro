@@ -1,15 +1,15 @@
 {
   "name": "arco-pro",
   "description": "Arco Design Pro for Vue",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "author": "",
   "license": "MIT",
   "scripts": {
     "dev": "vite --config ./build/vite.config.dev.ts",
-    "build": "vue-tsc --noEmit && vite build --config ./build/vite.config.prod.ts",
+    "build": "vue-tsc --noEmit && vite build --config ./build/vite.config.prod.ts --base=/arco-pro/",
     "report": "cross-env REPORT=true npm run build",
-    "preview": "npm run build && vite preview --host",
+    "preview": "npm run build && vite preview --host --base=/arco-pro/",
     "type:check": "vue-tsc --noEmit --skipLibCheck",
     "lint": "eslint src --fix --ext .ts,.tsx,.vue,.js,.jsx && prettier --write . && stylelint --fix **/*.{less,sass}"
   },

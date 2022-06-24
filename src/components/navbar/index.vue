@@ -2,7 +2,10 @@
   <div class="navbar">
     <div class="left-side layout-logo" :style="{ width: menuWidth + 'px' }">
       <a-space>
-        <div class="layout-logo__logo"><img src="../../assets/logo.svg" /></div>
+        <div class="layout-logo__warp">
+          <LogoSvg v-if="!collapsed" />
+          <icon-home v-else class="layout-logo__icon-logo" />
+        </div>
         <icon-menu-fold v-if="appStore.device === 'mobile'" style="font-size: 22px; cursor: pointer" @click="toggleDrawerMenu" />
       </a-space>
     </div>
@@ -123,6 +126,7 @@
   import useLocale from '@/hooks/locale';
   import useUser from '@/hooks/user';
   import MessageBox from '../message-box/index.vue';
+  import LogoSvg from '../../assets/logo.svg';
 
   const appStore = useAppStore();
   const userStore = useUserStore();
@@ -133,6 +137,9 @@
   const locales = [...LOCALE_OPTIONS];
   const menuWidth = computed(() => {
     return appStore.menuCollapse ? 48 : appStore.menuWidth;
+  });
+  const collapsed = computed(() => {
+    return appStore.menuCollapse;
   });
   const avatar = computed(() => {
     return userStore.avatar;

@@ -5,7 +5,6 @@ import vueJsx from '@vitejs/plugin-vue-jsx';
 import svgLoader from 'vite-svg-loader';
 
 export default defineConfig({
-  base: '/arco-pro/', // 外网部署的二级目录
   plugins: [vue(), vueJsx(), svgLoader({ svgoConfig: {} })],
   resolve: {
     alias: [
