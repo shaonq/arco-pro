@@ -112,6 +112,7 @@
     }
     .footer-wrap {
       text-align: center;
+      width: 100%;
     }
     .arco-typography {
       margin-bottom: 0;

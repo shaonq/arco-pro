@@ -1,6 +1,6 @@
 <template>
   <a-spin style="display: block" :loading="loading">
-    <a-tabs v-model:activeKey="messageType" type="rounded" destroy-on-hide>
+    <a-tabs v-model:activeKey="messageType" type="rounded" destroy-on-hide lazy-load>
       <a-tab-pane v-for="item in tabList" :key="item.key">
         <template #title>
           <span> {{ item.title }}{{ formatUnreadLength(item.key) }} </span>
@@ -36,20 +36,11 @@
   const { t } = useI18n();
   const messageData = reactive<{ renderList: MessageRecord[]; messageList: MessageRecord[] }>({ renderList: [], messageList: [] });
   toRefs(messageData);
-  const tabList: TabItem[] = [
-    {
-      key: 'message',
-      title: t('messageBox.tab.title.message'),
-    },
-    {
-      key: 'notice',
-      title: t('messageBox.tab.title.notice'),
-    },
-    {
-      key: 'todo',
-      title: t('messageBox.tab.title.todo'),
-    },
-  ];
+  const tabList: TabItem[] = computed(() => [
+    { key: 'message', title: t('messageBox.tab.title.message') },
+    { key: 'notice', title: t('messageBox.tab.title.notice') },
+    { key: 'todo', title: t('messageBox.tab.title.todo') },
+  ]);
   async function fetchSourceData() {
     setLoading(true);
     try {

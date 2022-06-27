@@ -27,17 +27,16 @@
 
 <style lang="less">
   /* 自定义样式 */
-  .arco-spin,
-  .panel {
-    border-radius: 2px;
-    box-shadow: 0 1px 3px rgba(18, 18, 18, 0.08);
-  }
-  .arco-card-bordered {
-    border: 1px solid #ebebeb;
-    border-radius: 2px;
-    box-shadow: 0 1px 3px rgba(18, 18, 18, 0.08);
-  }
-
+  // .arco-spin,
+  // .panel {
+  //   border-radius: 2px;
+  //   box-shadow: 0 1px 3px rgba(18, 18, 18, 0.08);
+  // }
+  // .arco-card-bordered {
+  //   border: 1px solid #ebebeb;
+  //   border-radius: 2px;
+  //   box-shadow: 0 1px 3px rgba(18, 18, 18, 0.08);
+  // }
   .arco-result-icon-success,
   .arco-result-icon-error,
   .arco-result-icon-info {

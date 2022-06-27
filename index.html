@@ -14,7 +14,62 @@
     <title>Arco Design Pro - 开箱即用的中台前端/设计解决方案</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <style>
+        .app--loading {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          line-height: 40px;
+          width: 160px;
+          font-style: italic;
+          font-size: 0;
+          color: #dbdbdb;
+          margin-left: -80px;
+          margin-top: -20px;
+          text-align: center;
+          user-select: none;
+        }
+        .app--loading i {
+          display: inline-block;
+          font-size: 28px;
+          animation: app--loading 1s infinite alternate;
+        }
+        .app--loading i:nth-of-type(8) {
+          animation-delay: -0.125s;
+        }
+        .app--loading i:nth-of-type(7) {
+          animation-delay: -0.25s;
+        }
+        .app--loading i:nth-of-type(6) {
+          animation-delay: -0.375s;
+        }
+        .app--loading i:nth-of-type(5) {
+          animation-delay: -0.5s;
+        }
+        .app--loading i:nth-of-type(4) {
+          animation-delay: -0.625s;
+        }
+        .app--loading i:nth-of-type(3) {
+          animation-delay: -0.75s;
+        }
+        .app--loading i:nth-of-type(2) {
+          animation-delay: -0.875s;
+        }
+        .app--loading i:nth-of-type(1) {
+          animation-delay: -1s;
+        }
+        @keyframes app--loading {
+          0% {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+      </style>
+      <div class="app--loading"> <i>L</i><i>o</i><i>a</i><i>d</i><i>i</i><i>n</i><i>g</i><i></i> </div>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
