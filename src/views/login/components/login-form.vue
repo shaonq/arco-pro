@@ -53,7 +53,7 @@
   const { loading, setLoading } = useLoading();
   const userStore = useUserStore();
 
-  const formSize = 'large';
+  const formSize: any = 'large';
 
   const loginConfig = useStorage('login-config', {
     rememberPassword: true,

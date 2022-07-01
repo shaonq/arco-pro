@@ -26,17 +26,13 @@
   import useLoading from '@/hooks/loading';
   import List from './list.vue';
 
-  interface TabItem {
-    key: string;
-    title: string;
-    avatar?: string;
-  }
+  // interface TabItem { key: string; title: string; avatar?: string; }
   const { loading, setLoading } = useLoading(true);
   const messageType = ref('message');
   const { t } = useI18n();
   const messageData = reactive<{ renderList: MessageRecord[]; messageList: MessageRecord[] }>({ renderList: [], messageList: [] });
   toRefs(messageData);
-  const tabList: TabItem[] = computed(() => [
+  const tabList = computed(() => [
     { key: 'message', title: t('messageBox.tab.title.message') },
     { key: 'notice', title: t('messageBox.tab.title.notice') },
     { key: 'todo', title: t('messageBox.tab.title.todo') },
@@ -52,6 +48,7 @@
       setLoading(false);
     }
   }
+  console.log('init');
   async function readMessage(data: MessageListType) {
     const ids = data.map((item) => item.id);
     await setMessageStatus({ ids });

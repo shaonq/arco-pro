@@ -26,33 +26,31 @@
 </script>
 
 <style lang="less">
-  /* 自定义样式 */
-  // .arco-spin,
-  // .panel {
-  //   border-radius: 2px;
-  //   box-shadow: 0 1px 3px rgba(18, 18, 18, 0.08);
-  // }
-  // .arco-card-bordered {
-  //   border: 1px solid #ebebeb;
-  //   border-radius: 2px;
-  //   box-shadow: 0 1px 3px rgba(18, 18, 18, 0.08);
-  // }
-  .arco-result-icon-success,
-  .arco-result-icon-error,
-  .arco-result-icon-info {
-    .arco-result-icon-tip {
-      width: 86px;
-      height: 86px;
-    }
-    svg {
-      width: 32px;
-      height: 32px;
+  .u-shadow {
+    border-radius: 2px;
+    box-shadow: 0 1px 3px rgba(18, 18, 18, 0.1);
+  }
+  :root body {
+    --gray-3: 235, 235, 235;
+    --color-text-1: #121212;
+    --color-text-2: #444;
+    .arco-result-icon-success,
+    .arco-result-icon-error,
+    .arco-result-icon-info {
+      .arco-result-icon-tip {
+        width: 86px;
+        height: 86px;
+      }
+      svg {
+        width: 32px;
+        height: 32px;
+      }
     }
   }
 </style>
 
 <style lang="less">
-  /** 修改浅色主题 */
+  /** edit arco-menu-light   */
   @sideThemeColor: #00163a;
   @sideThemeSubColor: #00081a;
   body {
@@ -127,7 +125,7 @@
         }
       }
 
-      /** 修改回传统的input样式 */
+      /** raw input */
       .arco-input-wrapper,
       .arco-textarea-wrapper,
       .arco-form-item-content-wrapper,

@@ -8,14 +8,14 @@ import viteImagemin from 'vite-plugin-imagemin';
 export default function configImageminPlugin() {
   const imageminPlugin = viteImagemin({
     gifsicle: {
-      optimizationLevel: 7,
+      optimizationLevel: 6,
       interlaced: false,
     },
     optipng: {
-      optimizationLevel: 7,
+      optimizationLevel: 6,
     },
     mozjpeg: {
-      quality: 20,
+      quality: 80,
     },
     pngquant: {
       quality: [0.8, 0.9],

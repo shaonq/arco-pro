@@ -6,7 +6,7 @@
   "author": "",
   "license": "MIT",
   "scripts": {
-    "dev": "vite --config ./build/vite.config.dev.ts",
+    "dev": "vite --host --config ./build/vite.config.dev.ts",
     "build": "vue-tsc --noEmit && vite build --config ./build/vite.config.prod.ts --base=/arco-pro/",
     "report": "cross-env REPORT=true npm run build",
     "preview": "npm run build && vite preview --host --base=/arco-pro/",
