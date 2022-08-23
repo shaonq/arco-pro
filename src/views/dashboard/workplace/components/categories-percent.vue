@@ -17,10 +17,10 @@
 
 <script lang="ts" setup>
   import useLoading from '@/hooks/loading';
-  import useChartOption from '@/hooks/chart-option';
+  import useChart from '@/hooks/chart';
 
   const { loading } = useLoading();
-  const { chartOption } = useChartOption((isDark) => {
+  const chartOption = useChart((isDark) => {
     // echarts support https://echarts.apache.org/zh/theme-builder.html
     // It's not used here
     return {

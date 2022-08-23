@@ -34,22 +34,20 @@
 
 <script lang="ts" setup>
   import { ref } from 'vue';
-  import { queryOperationLog, operationLogRes } from '@/api/profile';
   import useLoading from '@/hooks/loading';
 
   const { loading, setLoading } = useLoading(true);
-  const renderData = ref<operationLogRes>([]);
-  const fetchData = async () => {
+  const renderData = ref([]);
+  const dataInit = async () => {
     try {
-      const { data } = await queryOperationLog();
-      renderData.value = data;
+      /** */
     } catch (err) {
       // you can report use errorHandler or other
     } finally {
       setLoading(false);
     }
   };
-  fetchData();
+  dataInit();
 </script>
 
 <style scoped lang="less">

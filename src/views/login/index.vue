@@ -1,8 +1,10 @@
 <template>
-  <div class="container" :style="{ 'background-image': `url(${LoginBg})` }">
+  <div class="container">
     <div class="logo">
-      <LogoSvg />
+      <img alt="logo" src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/dfdba5317c0c20ce20e64fac803d52bc.svg~tplv-49unhts6dw-image.image" />
+      <div class="logo-text">Arco Design Pro</div>
     </div>
+    <LoginBanner />
     <div class="content">
       <div class="content-inner">
         <LoginForm />
@@ -16,18 +18,20 @@
 
 <script lang="ts" setup>
   import Footer from '@/components/footer/index.vue';
+  import LoginBanner from './components/banner.vue';
   import LoginForm from './components/login-form.vue';
-  import LoginBg from '../../assets/assets-login-bg-sunflower.jpg';
-  import LogoSvg from '../../assets/logo.svg';
 </script>
 
 <style lang="less" scoped>
   .container {
     display: flex;
     height: 100vh;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
+
+    .banner {
+      width: 550px;
+      background: linear-gradient(163.85deg, #1d2129 0%, #00308f 100%);
+    }
+
     .content {
       position: relative;
       display: flex;
@@ -35,16 +39,6 @@
       align-items: center;
       justify-content: center;
       padding-bottom: 40px;
-      overflow: hidden;
-      &-inner {
-        width: 400px;
-        max-width: 100%;
-        padding: 36px 24px 84px;
-        background: #fff;
-        min-height: 460px;
-        border-radius: 2px;
-        box-shadow: 0 1px 3px rgba(18, 18, 18, 0.1);
-      }
     }
 
     .footer {

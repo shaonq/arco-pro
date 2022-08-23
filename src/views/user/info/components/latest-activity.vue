@@ -29,22 +29,20 @@
 
 <script lang="ts" setup>
   import { ref } from 'vue';
-  import { queryLatestActivity, LatestActivity } from '@/api/user-center';
   import useLoading from '@/hooks/loading';
 
   const { loading, setLoading } = useLoading(true);
-  const activityList = ref<LatestActivity[]>(new Array(7).fill({}));
-  const fetchData = async () => {
+  const activityList = ref(new Array(7).fill({}));
+  const dataInit = async () => {
     try {
-      const { data } = await queryLatestActivity();
-      activityList.value = data;
+      /** */
     } catch (err) {
       // you can report use errorHandler or other
     } finally {
       setLoading(false);
     }
   };
-  fetchData();
+  dataInit();
 </script>
 
 <style scoped lang="less">

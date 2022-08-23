@@ -27,12 +27,11 @@
 
 <script lang="ts" setup>
   import { PropType, computed } from 'vue';
-  import { EnterpriseCertificationModel } from '@/api/user-center';
   import type { DescData } from '@arco-design/web-vue/es/descriptions/interface';
 
   const props = defineProps({
     enterpriseInfo: {
-      type: Object as PropType<EnterpriseCertificationModel>,
+      type: Object,
       required: true,
     },
   });

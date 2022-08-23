@@ -104,10 +104,9 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import { FormInstance } from '@arco-design/web-vue/es/form';
-  import { BasicInfoModel } from '@/api/user-center';
 
   const formRef = ref<FormInstance>();
-  const formData = ref<BasicInfoModel>({
+  const formData = ref({
     email: '',
     nickname: '',
     countryRegion: '',

@@ -66,7 +66,7 @@
 </style>
 
 <style lang="less" scoped>
-  .layout-mobile {
+  .mobile {
     .wrapper {
       padding: 24px 10px;
       .steps-wrapper {

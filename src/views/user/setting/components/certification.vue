@@ -6,28 +6,16 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
-  import { queryCertification, UnitCertification, EnterpriseCertificationModel } from '@/api/user-center';
+  import { ref, reactive } from 'vue';
   import useLoading from '@/hooks/loading';
   import EnterpriseCertification from './enterprise-certification.vue';
   import CertificationRecords from './certification-records.vue';
 
-  const { loading, setLoading } = useLoading(true);
-  const data = ref<UnitCertification>({
-    enterpriseInfo: {} as EnterpriseCertificationModel,
+  const data = reactive({
+    enterpriseInfo: [],
     record: [],
   });
-  const fetchData = async () => {
-    try {
-      const { data: resData } = await queryCertification();
-      data.value = resData;
-    } catch (err) {
-      // you can report use errorHandler or other
-    } finally {
-      setLoading(false);
-    }
-  };
-  fetchData();
+  const { loading, setLoading } = useLoading(true);
 </script>
 
 <style scoped lang="less"></style>

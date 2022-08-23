@@ -1,6 +1,7 @@
-import { DEFAULT_LAYOUT } from '@/router/constants';
+import { DEFAULT_LAYOUT } from '../base';
+import { AppRouteRecordRaw } from '../types';
 
-export default {
+const VISUALIZATION: AppRouteRecordRaw = {
   path: '/visualization',
   name: 'visualization',
   component: DEFAULT_LAYOUT,
@@ -33,3 +34,5 @@ export default {
     },
   ],
 };
+
+export default VISUALIZATION;

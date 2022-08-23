@@ -1,6 +1,7 @@
-import { DEFAULT_LAYOUT } from '@/router/constants';
+import { DEFAULT_LAYOUT } from '../base';
+import { AppRouteRecordRaw } from '../types';
 
-export default {
+const DASHBOARD: AppRouteRecordRaw = {
   path: '/dashboard',
   name: 'dashboard',
   component: DEFAULT_LAYOUT,
@@ -22,16 +23,18 @@ export default {
       },
     },
     /** simple */
-    {
-      path: 'monitor',
-      name: 'Monitor',
-      component: () => import('@/views/dashboard/monitor/index.vue'),
-      meta: {
-        locale: 'menu.dashboard.monitor',
-        requiresAuth: true,
-        roles: ['admin'],
-      },
-    },
+    // {
+    //   path: 'monitor',
+    //   name: 'Monitor',
+    //   component: () => import('@/views/dashboard/monitor/index.vue'),
+    //   meta: {
+    //     locale: 'menu.dashboard.monitor',
+    //     requiresAuth: true,
+    //     roles: ['admin'],
+    //   },
+    // },
     /** simple end */
   ],
 };
+
+export default DASHBOARD;

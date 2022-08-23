@@ -32,27 +32,24 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import useLoading from '@/hooks/loading';
-  import { submitChannelForm, BaseInfoModel, ChannelInfoModel, UnitChannelModel } from '@/api/form';
   import BaseInfo from './components/base-info.vue';
   import ChannelInfo from './components/channel-info.vue';
   import Success from './components/success.vue';
 
   const { loading, setLoading } = useLoading(false);
   const step = ref(1);
-  const submitModel = ref<UnitChannelModel>({} as UnitChannelModel);
+  const submitModel = ref<any>({});
   const submitForm = async () => {
     setLoading(true);
     try {
-      await submitChannelForm(submitModel.value); // The mock api default success
-      step.value = 3;
-      submitModel.value = {} as UnitChannelModel; // init
+      /**  */
     } catch (err) {
       // you can report use errorHandler or other
     } finally {
       setLoading(false);
     }
   };
-  const changeStep = (direction: string | number, model: BaseInfoModel | ChannelInfoModel) => {
+  const changeStep = (direction: string | number, model: any) => {
     if (typeof direction === 'number') {
       step.value = direction;
       return;

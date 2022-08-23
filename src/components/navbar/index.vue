@@ -3,23 +3,25 @@
     <div class="left-side layout-logo" :style="{ width: menuWidth + 'px' }">
       <a-space>
         <div class="layout-logo__warp">
-          <LogoSvg v-if="!collapsed" />
-          <icon-home v-else class="layout-logo__icon-logo" />
+          <icon-home v-if="collapsed" class="layout-logo__icon-logo" />
+          <LogoSvg v-else />
         </div>
         <icon-menu-fold v-if="appStore.device === 'mobile'" style="font-size: 22px; cursor: pointer" @click="toggleDrawerMenu" />
       </a-space>
     </div>
     <ul class="right-side">
-      <!-- <li>
+      <li>
         <a-tooltip :content="$t('settings.search')">
-          <a-button class="nav-btn" type="outline" shape="circle">
-            <template #icon> <icon-search /> </template>
+          <a-button class="nav-btn" type="outline" :shape="'circle'">
+            <template #icon>
+              <icon-search />
+            </template>
           </a-button>
         </a-tooltip>
-      </li> -->
+      </li>
       <li>
         <a-tooltip :content="$t('settings.language')">
-          <a-button class="nav-btn" type="outline" shape="circle" @click="setDropDownVisible">
+          <a-button class="nav-btn" type="outline" :shape="'circle'" @click="setDropDownVisible">
             <template #icon>
               <icon-language />
             </template>
@@ -36,7 +38,7 @@
       </li>
       <li>
         <a-tooltip :content="theme === 'light' ? $t('settings.navbar.theme.toDark') : $t('settings.navbar.theme.toLight')">
-          <a-button class="nav-btn" type="outline" shape="circle" @click="handleToggleTheme">
+          <a-button class="nav-btn" type="outline" :shape="'circle'" @click="handleToggleTheme">
             <template #icon>
               <icon-moon-fill v-if="theme === 'dark'" />
               <icon-sun-fill v-else />
@@ -48,39 +50,26 @@
         <a-tooltip :content="$t('settings.navbar.alerts')">
           <div class="message-box-trigger">
             <a-badge :count="9" dot>
-              <a-button class="nav-btn" type="outline" shape="circle" @click="setPopoverVisible">
+              <a-button class="nav-btn" type="outline" :shape="'circle'" @click="setPopoverVisible">
                 <icon-notification />
               </a-button>
             </a-badge>
           </div>
         </a-tooltip>
-        <a-popover trigger="click" :arrow-style="{ display: 'none' }" :content-style="{ padding: 0, width: '360px' }" content-class="message-popover">
+        <a-popover trigger="click" :arrow-style="{ display: 'none' }" :content-style="{ padding: 0, minWidth: '400px' }" content-class="message-popover">
           <div ref="refBtn" class="ref-btn"></div>
           <template #content>
             <message-box />
           </template>
         </a-popover>
       </li>
-      <!-- 
-        <li>
+      <li>
         <a-tooltip :content="isFullscreen ? $t('settings.navbar.screen.toExit') : $t('settings.navbar.screen.toFull')">
-          <a-button class="nav-btn" type="outline" shape="circle" @click="toggleFullScreen">
-            <template #icon> <icon-fullscreen-exit v-if="isFullscreen" /> <icon-fullscreen v-else /> </template>
-          </a-button>
-        </a-tooltip>
-      </li> 
-      -->
-      <li>
-        <a-tooltip :content="$t('settings.title')">
-          <a-button class="nav-btn" type="outline" shape="circle" @click="setVisible">
-            <template #icon> <icon-settings /> </template>
-          </a-button>
-        </a-tooltip>
-      </li>
-      <li>
-        <a-tooltip :content="$t('settings.helpDocument')">
-          <a-button class="nav-btn" type="outline" shape="circle" @click="openHelpDocument">
-            <template #icon> <icon-book /> </template>
+          <a-button class="nav-btn" type="outline" :shape="'circle'" @click="toggleFullScreen">
+            <template #icon>
+              <icon-fullscreen-exit v-if="isFullscreen" />
+              <icon-fullscreen v-else />
+            </template>
           </a-button>
         </a-tooltip>
       </li>
@@ -92,22 +81,34 @@
           <template #content>
             <a-doption>
               <a-space @click="switchRoles">
-                <icon-tag /> <span> {{ $t('messageBox.switchRoles') }} </span>
+                <icon-tag />
+                <span>
+                  {{ $t('messageBox.switchRoles') }}
+                </span>
               </a-space>
             </a-doption>
             <a-doption>
               <a-space @click="$router.push({ name: 'Info' })">
-                <icon-user /> <span> {{ $t('messageBox.userCenter') }} </span>
+                <icon-user />
+                <span>
+                  {{ $t('messageBox.userCenter') }}
+                </span>
               </a-space>
             </a-doption>
             <a-doption>
               <a-space @click="$router.push({ name: 'Setting' })">
-                <icon-settings /> <span> {{ $t('messageBox.userSettings') }} </span>
+                <icon-settings />
+                <span>
+                  {{ $t('messageBox.userSettings') }}
+                </span>
               </a-space>
             </a-doption>
             <a-doption>
               <a-space @click="handleLogout">
-                <icon-export /> <span> {{ $t('messageBox.logout') }} </span>
+                <icon-export />
+                <span>
+                  {{ $t('messageBox.logout') }}
+                </span>
               </a-space>
             </a-doption>
           </template>
@@ -120,7 +121,7 @@
 <script lang="ts" setup>
   import { computed, ref, inject } from 'vue';
   import { Message } from '@arco-design/web-vue';
-  import { useDark, useToggle } from '@vueuse/core';
+  import { useDark, useToggle, useFullscreen } from '@vueuse/core';
   import { useAppStore, useUserStore } from '@/store';
   import { LOCALE_OPTIONS } from '@/locale';
   import useLocale from '@/hooks/locale';
@@ -132,21 +133,12 @@
   const userStore = useUserStore();
   const { logout } = useUser();
   const { changeLocale } = useLocale();
-  // import { useFullscreen } from '@vueuse/core';
-  // const { isFullscreen, toggle: toggleFullScreen } = useFullscreen();
+  const { isFullscreen, toggle: toggleFullScreen } = useFullscreen();
   const locales = [...LOCALE_OPTIONS];
-  const menuWidth = computed(() => {
-    return appStore.menuCollapse ? 48 : appStore.menuWidth;
-  });
-  const collapsed = computed(() => {
-    return appStore.menuCollapse;
-  });
-  const avatar = computed(() => {
-    return userStore.avatar;
-  });
-  const theme = computed(() => {
-    return appStore.theme;
-  });
+  const avatar = computed(() => userStore.avatar);
+  const menuWidth = computed(() => (appStore.menuCollapse ? 48 : appStore.menuWidth));
+  const collapsed = computed(() => appStore.menuCollapse);
+  const theme = computed(() => appStore.theme);
   const isDark = useDark({
     selector: 'body',
     attribute: 'arco-theme',
@@ -164,9 +156,6 @@
   };
   const setVisible = () => {
     appStore.updateSettings({ globalSettings: true });
-  };
-  const openHelpDocument = () => {
-    window.open('https://arco.design/vue/docs/pro/permission');
   };
   const refBtn = ref();
   const triggerBtn = ref();
@@ -243,9 +232,6 @@
       margin-left: 14px;
     }
   }
-</style>
-
-<style lang="less">
   .message-popover {
     .arco-popover-content {
       margin-top: 0;

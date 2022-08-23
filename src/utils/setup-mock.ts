@@ -1,11 +1,7 @@
-/**
- * @param {Object} obj
- * @param {Boolean} obj.mock
- * @param  {Function} obj.setup
- * @desc 初始化mock
- */
+import debug from './env';
+
 export default ({ mock, setup }: { mock?: boolean; setup: () => void }) => {
-  if (mock !== false) setup();
+  if (mock !== false && debug) setup();
 };
 
 export const successResponseWrap = (data: unknown) => {

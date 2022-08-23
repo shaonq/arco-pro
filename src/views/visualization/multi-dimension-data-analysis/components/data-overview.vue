@@ -21,11 +21,10 @@
   import { computed, ref } from 'vue';
   import { useI18n } from 'vue-i18n';
   import { LineSeriesOption } from 'echarts';
-  import { queryDataOverview } from '@/api/visualization';
   import useLoading from '@/hooks/loading';
   import { ToolTipFormatterParams } from '@/types/echarts';
   import useThemes from '@/hooks/themes';
-  import useChartOption from '@/hooks/chart-option';
+  import useChartOption from '@/hooks/chart';
 
   const tooltipItemsHtmlString = (items: ToolTipFormatterParams[]) => {
     return items
@@ -118,7 +117,7 @@
   const contentClickData = ref<number[]>([]);
   const contentExposureData = ref<number[]>([]);
   const activeUsersData = ref<number[]>([]);
-  const { chartOption } = useChartOption((dark) => {
+  const chartOption = useChartOption((dark) => {
     return {
       grid: {
         left: '2.6%',
@@ -218,28 +217,17 @@
       ],
     };
   });
-  const fetchData = async () => {
+  const dataInit = async () => {
     setLoading(true);
     try {
-      const { data } = await queryDataOverview();
-      xAxis.value = data.xAxis;
-      data.data.forEach((el) => {
-        if (el.name === '内容生产量') {
-          contentProductionData.value = el.value;
-        } else if (el.name === '内容点击量') {
-          contentClickData.value = el.value;
-        } else if (el.name === '内容曝光量') {
-          contentExposureData.value = el.value;
-        }
-        activeUsersData.value = el.value;
-      });
+      /** */
     } catch (err) {
       // you can report use errorHandler or other
     } finally {
       setLoading(false);
     }
   };
-  fetchData();
+  dataInit();
 </script>
 
 <style scoped lang="less">

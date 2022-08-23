@@ -12,9 +12,8 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import useLoading from '@/hooks/loading';
-  import { queryContentPeriodAnalysis } from '@/api/visualization';
   import { ToolTipFormatterParams } from '@/types/echarts';
-  import useChartOption from '@/hooks/chart-option';
+  import useChartOption from '@/hooks/chart';
 
   const tooltipItemsHtmlString = (items: ToolTipFormatterParams[]) => {
     return items
@@ -37,7 +36,7 @@
   const textChartsData = ref<number[]>([]);
   const imgChartsData = ref<number[]>([]);
   const videoChartsData = ref<number[]>([]);
-  const { chartOption } = useChartOption((isDark) => {
+  const chartOption = useChartOption((isDark) => {
     return {
       grid: {
         left: '40',
@@ -185,26 +184,17 @@
       ],
     };
   });
-  const fetchData = async () => {
+  const dataInit = async () => {
     setLoading(true);
     try {
-      const { data: chartData } = await queryContentPeriodAnalysis();
-      xAxis.value = chartData.xAxis;
-      chartData.data.forEach((el) => {
-        if (el.name === '纯文本') {
-          textChartsData.value = el.value;
-        } else if (el.name === '图文类') {
-          imgChartsData.value = el.value;
-        }
-        videoChartsData.value = el.value;
-      });
+      /** */
     } catch (err) {
       // you can report use errorHandler or other
     } finally {
       setLoading(false);
     }
   };
-  fetchData();
+  dataInit();
 </script>
 
 <style scoped lang="less">

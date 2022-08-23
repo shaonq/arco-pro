@@ -1,6 +1,5 @@
 export default {
   'settings.title': '页面配置',
-  'settings.helpDocument': '帮助文档',
   'settings.themeColor': '主题色',
   'settings.content': '内容区域',
   'settings.search': '搜索',

@@ -8,7 +8,7 @@
         <a-link>{{ $t('workplace.viewMore') }}</a-link>
       </template>
       <a-space direction="vertical" :size="10" fill>
-        <a-radio-group v-model:model-value="type" type="button" @change="typeChange as any">
+        <a-radio-group v-model:model-value="type" type="button" @change="dataInit">
           <a-radio value="text">
             {{ $t('workplace.popularContent.text') }}
           </a-radio>
@@ -24,23 +24,13 @@
             <a-table-column title="排名" data-index="key"></a-table-column>
             <a-table-column title="内容标题" data-index="title">
               <template #cell="{ record }">
-                <a-typography-paragraph
-                  :ellipsis="{
-                    rows: 1,
-                  }"
-                >
+                <a-typography-paragraph :ellipsis="{ rows: 1 }">
                   {{ record.title }}
                 </a-typography-paragraph>
               </template>
             </a-table-column>
             <a-table-column title="点击量" data-index="clickNumber"> </a-table-column>
-            <a-table-column
-              title="日涨幅"
-              data-index="increases"
-              :sortable="{
-                sortDirections: ['ascend', 'descend'],
-              }"
-            >
+            <a-table-column title="日涨幅" data-index="increases" :sortable="{ sortDirections: ['ascend', 'descend'] }">
               <template #cell="{ record }">
                 <div class="increases-cell">
                   <span>{{ record.increases }}%</span>
@@ -58,27 +48,25 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import useLoading from '@/hooks/loading';
-  import { queryPopularList } from '@/api/dashboard';
   import type { TableData } from '@arco-design/web-vue/es/table/interface';
 
   const type = ref('text');
   const { loading, setLoading } = useLoading();
   const renderList = ref<TableData[]>();
-  const fetchData = async (contentType: string) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const dataInit = async (contentType: string) => {
     try {
       setLoading(true);
-      const { data } = await queryPopularList({ type: contentType });
-      renderList.value = data;
+      await new Promise((resolve) => {
+        setTimeout(resolve, 1e3);
+      });
     } catch (err) {
       // you can report use errorHandler or other
     } finally {
       setLoading(false);
     }
   };
-  const typeChange = (contentType: string) => {
-    fetchData(contentType);
-  };
-  fetchData('text');
+  dataInit('text');
 </script>
 
 <style scoped lang="less">

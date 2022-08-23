@@ -7,6 +7,7 @@ export default mergeConfig(
     mode: 'development',
     server: {
       open: false,
+      port: 5050, // 启动端口号
       fs: {
         strict: true,
       },

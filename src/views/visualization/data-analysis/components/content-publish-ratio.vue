@@ -16,8 +16,7 @@
   import { ref } from 'vue';
   import { ToolTipFormatterParams } from '@/types/echarts';
   import useLoading from '@/hooks/loading';
-  import { queryContentPublish, ContentPublishRecord } from '@/api/visualization';
-  import useChartOption from '@/hooks/chart-option';
+  import useChartOption from '@/hooks/chart';
 
   const tooltipItemsHtmlString = (items: ToolTipFormatterParams[]) => {
     return items
@@ -42,7 +41,7 @@
   const textChartsData = ref<number[]>([]);
   const imgChartsData = ref<number[]>([]);
   const videoChartsData = ref<number[]>([]);
-  const { chartOption } = useChartOption((isDark) => {
+  const chartOption = useChartOption((isDark) => {
     return {
       grid: {
         left: '4%',
@@ -132,26 +131,17 @@
       ],
     };
   });
-  const fetchData = async () => {
+  const dataInit = async () => {
     setLoading(true);
     try {
-      const { data: chartData } = await queryContentPublish();
-      xAxis.value = chartData[0].x;
-      chartData.forEach((el: ContentPublishRecord) => {
-        if (el.name === '纯文本') {
-          textChartsData.value = el.y;
-        } else if (el.name === '图文类') {
-          imgChartsData.value = el.y;
-        }
-        videoChartsData.value = el.y;
-      });
+      /** */
     } catch (err) {
       // you can report use errorHandler or other
     } finally {
       setLoading(false);
     }
   };
-  fetchData();
+  dataInit();
 </script>
 
 <style scoped lang="less"></style>

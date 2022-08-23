@@ -4,6 +4,7 @@ import { useUserStore } from '@/store';
 import { getToken } from '@/utils/auth';
 
 export interface HttpResponse<T = unknown> {
+  count?: number;
   status: number;
   msg: string;
   code: number;
@@ -35,7 +36,7 @@ axios.interceptors.response.use(
   (response: AxiosResponse<HttpResponse>) => {
     const res = response.data;
     // if the custom code is not 20000, it is judged as an error.
-    if (res.code !== 20000) {
+    if (res.code !== 0) {
       Message.error({
         content: res.msg || 'Error',
         duration: 5 * 1000,
@@ -48,7 +49,6 @@ axios.interceptors.response.use(
           okText: 'Re-Login',
           async onOk() {
             const userStore = useUserStore();
-
             await userStore.logout();
             window.location.reload();
           },
@@ -60,7 +60,7 @@ axios.interceptors.response.use(
   },
   (error) => {
     Message.error({
-      content: error.msg || 'Request Error',
+      content: error.msg || 'Network Error',
       duration: 5 * 1000,
     });
     return Promise.reject(error);

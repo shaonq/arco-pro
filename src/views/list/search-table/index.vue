@@ -136,7 +136,6 @@
   import { computed, ref, reactive } from 'vue';
   import { useI18n } from 'vue-i18n';
   import useLoading from '@/hooks/loading';
-  import { queryPolicyList, PolicyRecord, PolicyParams } from '@/api/list';
   import { Pagination } from '@/types/global';
   import type { SelectOptionData } from '@arco-design/web-vue/es/select/interface';
 
@@ -152,7 +151,7 @@
   };
   const { loading, setLoading } = useLoading(true);
   const { t } = useI18n();
-  const renderData = ref<PolicyRecord[]>([]);
+  const renderData = ref<any[]>([]);
   const formModel = ref(generateFormModel());
   const basePagination: Pagination = {
     current: 1,
@@ -195,13 +194,10 @@
       value: 'offline',
     },
   ]);
-  const fetchData = async (params: PolicyParams = { current: 1, pageSize: 20 }) => {
+  const dataInit = async () => {
     setLoading(true);
     try {
-      const { data } = await queryPolicyList(params);
-      renderData.value = data.list;
-      pagination.current = params.current;
-      pagination.total = data.total;
+      /** */
     } catch (err) {
       // you can report use errorHandler or other
     } finally {
@@ -210,16 +206,16 @@
   };
 
   const search = () => {
-    fetchData({
+    dataInit({
       ...basePagination,
       ...formModel.value,
-    } as unknown as PolicyParams);
+    } as unknown);
   };
   const onPageChange = (current: number) => {
-    fetchData({ ...basePagination, current });
+    dataInit({ ...basePagination, current });
   };
 
-  fetchData();
+  dataInit();
   const reset = () => {
     formModel.value = generateFormModel();
   };

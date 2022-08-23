@@ -13,6 +13,7 @@ export default function useLocale() {
     Message.success(i18.t('navbar.action.locale'));
   };
   return {
+    ...i18,
     currentLocale,
     changeLocale,
   };

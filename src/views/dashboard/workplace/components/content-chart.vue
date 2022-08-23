@@ -20,8 +20,7 @@
   import { ref } from 'vue';
   import { graphic } from 'echarts';
   import useLoading from '@/hooks/loading';
-  import { queryContentData, ContentDataRecord } from '@/api/dashboard';
-  import useChartOption from '@/hooks/chart-option';
+  import useChart from '@/hooks/chart';
   import { ToolTipFormatterParams } from '@/types/echarts';
   import { AnyObject } from '@/types/global';
 
@@ -42,10 +41,10 @@
   const xAxis = ref<string[]>([]);
   const chartsData = ref<number[]>([]);
   const graphicElements = ref([graphicFactory({ left: '2.6%' }), graphicFactory({ right: 0 })]);
-  const { chartOption } = useChartOption(() => {
+  const chartOption = useChart(() => {
     return {
       grid: {
-        left: '2.6%',
+        left: '3.6%',
         right: '0',
         top: '10',
         bottom: '30',
@@ -111,10 +110,8 @@
         trigger: 'axis',
         formatter(params) {
           const [firstElement] = params as ToolTipFormatterParams[];
-          return `<div>
-            <p class="tooltip-title">${firstElement.axisValueLabel}</p>
-            <div class="content-panel"><span>总内容量</span><span class="tooltip-value">${(Number(firstElement.value) * 10000).toLocaleString()}</span></div>
-          </div>`;
+          return `<div> <p class="tooltip-title">${firstElement.axisValueLabel}</p> <div class="content-panel">
+          <span>总内容量</span><span class="tooltip-value">${(Number(firstElement.value) * 10000).toLocaleString()}</span></div> </div>`;
         },
         className: 'echarts-tooltip-diy',
       },
@@ -137,51 +134,39 @@
           lineStyle: {
             width: 3,
             color: new graphic.LinearGradient(0, 0, 1, 0, [
-              {
-                offset: 0,
-                color: 'rgba(30, 231, 255, 1)',
-              },
-              {
-                offset: 0.5,
-                color: 'rgba(36, 154, 255, 1)',
-              },
-              {
-                offset: 1,
-                color: 'rgba(111, 66, 251, 1)',
-              },
+              { offset: 0, color: 'rgba(30, 231, 255, 1)' },
+              { offset: 0.5, color: 'rgba(36, 154, 255, 1)' },
+              { offset: 1, color: 'rgba(111, 66, 251, 1)' },
             ]),
           },
           showSymbol: false,
           areaStyle: {
             opacity: 0.8,
             color: new graphic.LinearGradient(0, 0, 0, 1, [
-              {
-                offset: 0,
-                color: 'rgba(17, 126, 255, 0.16)',
-              },
-              {
-                offset: 1,
-                color: 'rgba(17, 128, 255, 0)',
-              },
+              { offset: 0, color: 'rgba(17, 126, 255, 0.16)' },
+              { offset: 1, color: 'rgba(17, 128, 255, 0)' },
             ]),
           },
         },
       ],
     };
   });
-  const fetchData = async () => {
+  const dataInit = async () => {
     setLoading(true);
     try {
-      const { data: chartData } = await queryContentData();
-      chartData.forEach((el: ContentDataRecord, idx: number) => {
+      // const { data: chartData } = await queryContentData();
+      const list = [...Array(10)].map((_, i) => {
+        return {
+          x: i + 1,
+          // eslint-disable-next-line no-bitwise
+          y: (i * Math.random() * 1e3) | 0,
+        };
+      });
+      list.forEach((el = { x: 0, y: 0 }, idx: number) => {
         xAxis.value.push(el.x);
         chartsData.value.push(el.y);
-        if (idx === 0) {
-          graphicElements.value[0].style.text = el.x;
-        }
-        if (idx === chartData.length - 1) {
-          graphicElements.value[1].style.text = el.x;
-        }
+        if (idx === 0) graphicElements.value[0].style.text = el.x;
+        if (idx === list.length - 1) graphicElements.value[1].style.text = el.x;
       });
     } catch (err) {
       // you can report use errorHandler or other
@@ -189,7 +174,7 @@
       setLoading(false);
     }
   };
-  fetchData();
+  dataInit();
 </script>
 
 <style scoped lang="less"></style>

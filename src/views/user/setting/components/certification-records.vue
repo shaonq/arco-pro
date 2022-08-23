@@ -39,12 +39,9 @@
 </template>
 
 <script lang="ts" setup>
-  import { PropType } from 'vue';
-  import { CertificationRecord } from '@/api/user-center';
-
   defineProps({
     renderData: {
-      type: Array as PropType<CertificationRecord>,
+      type: Array,
       default() {
         return [];
       },

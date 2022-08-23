@@ -5,14 +5,14 @@
     <div class="login-form-error-msg">{{ errorMessage }}</div>
     <a-form ref="loginForm" :model="userInfo" class="login-form" layout="vertical" @submit="handleSubmit">
       <a-form-item field="username" :rules="[{ required: true, message: $t('login.form.userName.errMsg') }]" :validate-trigger="['change', 'blur']" hide-label>
-        <a-input v-model="userInfo.username" :size="formSize" :placeholder="$t('login.form.userName.placeholder')">
+        <a-input v-model="userInfo.username" :placeholder="$t('login.form.userName.placeholder')">
           <template #prefix>
             <icon-user />
           </template>
         </a-input>
       </a-form-item>
       <a-form-item field="password" :rules="[{ required: true, message: $t('login.form.password.errMsg') }]" :validate-trigger="['change', 'blur']" hide-label>
-        <a-input-password v-model="userInfo.password" :size="formSize" :placeholder="$t('login.form.password.placeholder')" allow-clear>
+        <a-input-password v-model="userInfo.password" :placeholder="$t('login.form.password.placeholder')" allow-clear>
           <template #prefix>
             <icon-lock />
           </template>
@@ -20,15 +20,15 @@
       </a-form-item>
       <a-space :size="16" direction="vertical">
         <div class="login-form-password-actions">
-          <a-checkbox checked="rememberPassword" :model-value="loginConfig.rememberPassword" @change="setRememberPassword">
+          <a-checkbox checked="rememberPassword" :model-value="loginConfig.rememberPassword" @change="setRememberPassword as any">
             {{ $t('login.form.rememberPassword') }}
           </a-checkbox>
           <a-link>{{ $t('login.form.forgetPassword') }}</a-link>
         </div>
-        <a-button type="primary" html-type="submit" :size="formSize" long :loading="loading">
+        <a-button type="primary" html-type="submit" long :loading="loading">
           {{ $t('login.form.login') }}
         </a-button>
-        <a-button type="text" long :size="formSize" class="login-form-register-btn">
+        <a-button type="text" long class="login-form-register-btn">
           {{ $t('login.form.register') }}
         </a-button>
       </a-space>
@@ -53,8 +53,6 @@
   const { loading, setLoading } = useLoading();
   const userStore = useUserStore();
 
-  const formSize: any = 'large';
-
   const loginConfig = useStorage('login-config', {
     rememberPassword: true,
     username: 'admin', // 演示默认值
@@ -66,6 +64,7 @@
   });
 
   const handleSubmit = async ({ errors, values }: { errors: Record<string, ValidatedError> | undefined; values: Record<string, any> }) => {
+    if (loading.value) return;
     if (!errors) {
       setLoading(true);
       try {
@@ -91,7 +90,7 @@
       }
     }
   };
-  const setRememberPassword: any = (value: boolean) => {
+  const setRememberPassword = (value: boolean) => {
     loginConfig.value.rememberPassword = value;
   };
 </script>
@@ -100,7 +99,6 @@
   .login-form {
     &-wrapper {
       width: 320px;
-      margin: 0 auto;
     }
 
     &-title {

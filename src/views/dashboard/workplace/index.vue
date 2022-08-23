@@ -130,7 +130,7 @@
 
 <style lang="less" scoped>
   // responsive
-  .layout-mobile {
+  .mobile {
     .container {
       display: block;
     }
