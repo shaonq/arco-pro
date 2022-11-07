@@ -1,6 +1,6 @@
 <template>
   <a-layout class="layout" :class="{ 'layout-mobile': appStore.hideMenu, 'layout-collapsed': collapsed }">
-    <div v-if="navbar" class="layout-navbar"> <NavBar /> </div>
+    <template v-if="navbar"> <NavBar /> </template>
     <a-layout>
       <a-layout>
         <a-layout-sider

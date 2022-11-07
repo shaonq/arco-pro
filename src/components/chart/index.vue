@@ -1,5 +1,5 @@
 <template>
-  <VCharts v-if="renderChart" :option="options" :auto-resize="autoResize" :style="{ width, height }" />
+  <VCharts v-if="renderChart" :option="options" :autoresize="autoResize" :style="{ width, height }" />
 </template>
 
 <script lang="ts" setup>

@@ -10,7 +10,7 @@
   import useLoading from '@/hooks/loading';
   import useChartOption from '@/hooks/chart';
 
-  const chartOption = useChartOption((isDark) => {
+  const  chartOption = useChartOption((isDark) => {
     const graphicElementStyle = {
       textAlign: 'center',
       fill: isDark ? 'rgba(255,255,255,0.7)' : '#4E5969',

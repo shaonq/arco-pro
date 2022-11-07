@@ -8,6 +8,10 @@
   margin-top: 16px;
 }
 
+.u-ml {
+  margin-left: 16px;
+}
+
 .u-card-hd-title {
   flex: 1;
   color: #7d84a7;
@@ -15,12 +19,36 @@
   font-size: 12px;
 }
 
+// arco-empty
+.arco-empty {
+  .arco-empty-image svg {
+    stroke-width: 2;
+  }
+}
+
 /** global light change   */
 body {
+  --shadow--type-1: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+
   &:not([arco-theme='dark']) {
+    /** edit arco-menu-light   */
+    --u-theme-color: #00163a;
+    --u-theme-sub-color: #00081a;
     --gray-3: 235, 235, 235;
     --color-text-1: #121212;
     --color-text-2: #444;
+    --primary-6: 22, 93, 222;
+    --primary-5: 22, 98, 227;
+    --primary-7: 22, 103, 232;
+    --red-6: 211, 53, 60;
+    --red-5: 211, 53, 70;
+    --red-7: 211, 53, 80;
+
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+    #nprogress .bar {
+      background: rgb(var(--primary-6));
+    }
 
     .arco-result-icon-success,
     .arco-result-icon-error,
@@ -36,24 +64,13 @@ body {
       }
     }
 
-    /** edit arco-menu-light   */
-    --u-theme-color: #1e2a3b;
-    // --u-theme-sub-color: #182434;
-    --u-theme-sub-color: #000c17;
-    --primary-6: 0, 70, 135; // #004687;
-    --primary-5: 0, 75, 140;
-    --primary-7: 0, 75, 145;
-    --red-6: 211, 53, 60;
-    --red-5: 211, 53, 70;
-    --red-7: 211, 53, 80;
-
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-
     .layout-content {
-      background: #f5f7fb;
+      background: rgb(var(--gray-2));
     }
 
     .layout:not(.layout-mobile) .layout-logo {
+      color: #fff;
+      font-size: 24px;
       background: var(--u-theme-color);
       box-shadow: -1px 0 0 1px var(--u-theme-color);
 
@@ -62,7 +79,7 @@ body {
       }
     }
 
-    // mobile  drawer
+    // mobile drawer
     .layout-menu--drawer .arco-drawer-body {
       padding: 0;
     }
@@ -72,6 +89,7 @@ body {
       font-size: 18px;
     }
 
+    // menu style change
     .arco-menu-light.layout-menu {
       background: var(--u-theme-color);
       // menu content
@@ -98,6 +116,7 @@ body {
       .arco-menu-item:hover {
         background: rgba(#fff, 0.1);
       }
+
       // selected
       .arco-menu-inline-header.arco-menu-selected {
         &,
@@ -118,28 +137,25 @@ body {
       }
     }
 
-    /** raw input */
+    // raw input
     .arco-input-wrapper,
     .arco-textarea-wrapper,
-    .arco-form-item-content-wrapper,
-    .arco-picker-range:not(.arco-picker-error),
-    .arco-select-view {
-      &,
+    .arco-picker,
+    .arco-select-view-single,
+    .arco-select-view .arco-textarea-wrapper,
+    .arco-select-view .arco-form-item-content-wrapper,
+    .arco-picker-range:not(.arco-picker-error) {
+      background-color: transparent;
+      border-color: var(--color-fill-3);
+
       &:hover {
         background-color: transparent;
+        border-color: var(--color-fill-4);
       }
 
-      &,
       & + .arco-input-append {
         border-color: var(--color-fill-3);
-      }
-
-      & + .arco-input-append {
         border-left-color: transparent;
-      }
-
-      &:hover {
-        border-color: var(--color-fill-4);
       }
     }
 
@@ -152,5 +168,37 @@ body {
         border-color: var(--color-danger-light-2);
       }
     }
+
+    // arco tooltip
+    .arco-tooltip {
+      --color-tooltip-bg: rgb(var(--gray-9));
+
+      .arco-tooltip-content {
+        box-shadow: var(--shadow--type-1);
+      }
+    }
+  }
+
+  // arco shadow
+  .arco-dropdown {
+    border-color: transparent;
+    // .arco-tooltip-content {
+    box-shadow: var(--shadow--type-1);
+    // }
+    .arco-dropdown-option {
+      padding-top: 5px;
+      padding-bottom: 5px;
+      line-height: 22px;
+    }
+  }
+  // arco table
+  .arco-table {
+    &-th {
+      background-color: var(--color-neutral-1);
+    }
+  }
+  // arco icon
+  .arco-icon {
+    stroke-width: 3;
   }
 }

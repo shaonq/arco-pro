@@ -7,7 +7,7 @@
 <script lang="ts" setup>
   import useChartOption from '@/hooks/chart';
 
-  const chartOption = useChartOption((isDark) => {
+  const  chartOption = useChartOption((isDark) => {
     return {
       grid: {
         left: 44,

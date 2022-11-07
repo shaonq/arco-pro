@@ -51,6 +51,7 @@
     }
   }
   async function readMessage(data: any[]) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const ids = data.map((item) => item.id);
     // await setMessageStatus({ ids });
     // fetchSourceData();

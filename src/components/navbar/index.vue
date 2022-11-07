@@ -1,15 +1,18 @@
 <template>
-  <div class="navbar">
-    <div class="left-side layout-logo" :style="{ width: menuWidth + 'px' }">
+  <div class="layout-navbar">
+    <div class="layout-left-side layout-logo" :style="{ width: menuWidth + 'px' }">
       <a-space>
-        <div class="layout-logo__warp">
+        <div>
           <icon-home v-if="collapsed" class="layout-logo__icon-logo" />
-          <LogoSvg v-else />
+          <!-- <LogoSvg v-else /> -->
+          <!-- @TODO: 修改logo -->
+          <div v-else>LOGO</div>
         </div>
         <icon-menu-fold v-if="appStore.device === 'mobile'" style="font-size: 22px; cursor: pointer" @click="toggleDrawerMenu" />
       </a-space>
     </div>
-    <ul class="right-side">
+    <h1 class="layout-app-name">后台管理系统</h1>
+    <ul class="layout-right-side">
       <li>
         <a-tooltip :content="$t('settings.search')">
           <a-button class="nav-btn" type="outline" :shape="'circle'">
@@ -186,7 +189,7 @@
 </script>
 
 <style scoped lang="less">
-  .navbar {
+  .layout-navbar {
     display: flex;
     justify-content: space-between;
     height: 100%;
@@ -194,14 +197,20 @@
     border-bottom: 1px solid var(--color-border);
   }
 
-  .left-side {
+  .layout-left-side {
     display: flex;
     flex-wrap: wrap;
     align-content: center;
     justify-content: center;
   }
-
-  .right-side {
+  .layout-app-name {
+    flex: 1;
+    margin: 0 20px;
+    line-height: 60px;
+    font-size: 24px;
+    font-weight: 500;
+  }
+  .layout-right-side {
     display: flex;
     padding-right: 20px;
     list-style: none;
