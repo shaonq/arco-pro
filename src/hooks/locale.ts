@@ -7,13 +7,15 @@ export default function useLocale() {
   const currentLocale = computed(() => {
     return i18.locale.value;
   });
-  const changeLocale: any = (value: string) => {
+  const changeLocale = (value: string) => {
+    if (i18.locale.value === value) {
+      return;
+    }
     i18.locale.value = value;
     localStorage.setItem('arco-locale', value);
     Message.success(i18.t('navbar.action.locale'));
   };
   return {
-    ...i18,
     currentLocale,
     changeLocale,
   };

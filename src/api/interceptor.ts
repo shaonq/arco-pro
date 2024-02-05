@@ -1,14 +1,18 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios from 'axios';
+import type { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Message, Modal } from '@arco-design/web-vue';
 import { useUserStore } from '@/store';
 import { getToken } from '@/utils/auth';
 
 export interface HttpResponse<T = unknown> {
-  count?: number;
   status: number;
   msg: string;
   code: number;
   data: T;
+}
+
+if (import.meta.env.VITE_API_BASE_URL) {
+  axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL;
 }
 
 axios.interceptors.request.use(
@@ -36,7 +40,7 @@ axios.interceptors.response.use(
   (response: AxiosResponse<HttpResponse>) => {
     const res = response.data;
     // if the custom code is not 20000, it is judged as an error.
-    if (res.code !== 0) {
+    if (res.code !== 20000) {
       Message.error({
         content: res.msg || 'Error',
         duration: 5 * 1000,
@@ -49,6 +53,7 @@ axios.interceptors.response.use(
           okText: 'Re-Login',
           async onOk() {
             const userStore = useUserStore();
+
             await userStore.logout();
             window.location.reload();
           },
@@ -60,7 +65,7 @@ axios.interceptors.response.use(
   },
   (error) => {
     Message.error({
-      content: error.msg || 'Network Error',
+      content: error.msg || 'Request Error',
       duration: 5 * 1000,
     });
     return Promise.reject(error);

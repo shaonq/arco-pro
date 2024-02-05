@@ -1,6 +1,8 @@
 <template>
-  <a-layout class="layout" :class="{ 'layout-mobile': appStore.hideMenu, 'layout-collapsed': collapsed }">
-    <template v-if="navbar"> <NavBar /> </template>
+  <a-layout class="layout" :class="{ mobile: appStore.hideMenu }">
+    <div v-if="navbar" class="layout-navbar" :style="{ left: navbar ? menuWidth + 'px' : '', width: 'auto', right: 0 }">
+      <NavBar />
+    </div>
     <a-layout>
       <a-layout>
         <a-layout-sider
@@ -11,27 +13,26 @@
           :collapsed="collapsed"
           :collapsible="true"
           :width="menuWidth"
-          :style="{ paddingTop: navbar ? '60px' : '' }"
+          :style="{ paddingTop: !navbar ? navbarHeight : '' }"
           :hide-trigger="true"
           @collapse="setCollapsed"
         >
-          <div class="menu-wrapper"> <Menu /> </div>
+          <div class="menu-wrapper">
+            <!-- add logo -->
+            <div class="layout-logo" :class="{ collapsed: collapsed }" :style="{ backgroundImage: 'url(' + LogoWhite + ')' }"> </div>
+            <a-scrollbar :outer-style="{ flex: 1, width: '100%', overflowY: 'auto' }" style="height: 100%; overflow-y: auto">
+              <Menu />
+            </a-scrollbar>
+          </div>
         </a-layout-sider>
-        <a-drawer
-          v-if="hideMenu"
-          class="layout-menu--drawer"
-          :visible="drawerVisible"
-          placement="left"
-          :footer="false"
-          mask-closable
-          :closable="false"
-          @cancel="drawerCancel"
-        >
+        <a-drawer v-if="hideMenu" :visible="drawerVisible" placement="left" :footer="false" mask-closable :closable="false" @cancel="drawerCancel">
           <Menu />
         </a-drawer>
         <a-layout class="layout-content" :style="paddingStyle">
           <TabBar v-if="appStore.tabBar" />
-          <a-layout-content> <PageLayout /> </a-layout-content>
+          <a-layout-content>
+            <PageLayout />
+          </a-layout-content>
           <Footer v-if="footer" />
         </a-layout>
       </a-layout>
@@ -40,7 +41,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, computed, watch, provide } from 'vue';
+  import { ref, computed, watch, provide, onMounted } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
   import { useAppStore, useUserStore } from '@/store';
   import NavBar from '@/components/navbar/index.vue';
@@ -50,16 +51,18 @@
   import usePermission from '@/hooks/permission';
   import useResponsive from '@/hooks/responsive';
   import PageLayout from './page-layout.vue';
+  import LogoWhite from '../assets/logo-white.png';
 
+  const isInit = ref(false);
   const appStore = useAppStore();
   const userStore = useUserStore();
   const router = useRouter();
   const route = useRoute();
   const permission = usePermission();
   useResponsive(true);
-  const navbarHeight = `60px`;
+  const navbarHeight = `52px`;
   const navbar = computed(() => appStore.navbar);
-  const renderMenu = computed(() => appStore.menu);
+  const renderMenu = computed(() => appStore.menu && !appStore.topMenu);
   const hideMenu = computed(() => appStore.hideMenu);
   const footer = computed(() => appStore.footer);
   const menuWidth = computed(() => {
@@ -74,6 +77,7 @@
     return { ...paddingLeft, ...paddingTop };
   });
   const setCollapsed = (val: boolean) => {
+    if (!isInit.value) return; // for page initialization menu state problem
     appStore.updateSettings({ menuCollapse: val });
   };
   watch(
@@ -89,10 +93,13 @@
   provide('toggleDrawerMenu', () => {
     drawerVisible.value = !drawerVisible.value;
   });
+  onMounted(() => {
+    isInit.value = true;
+  });
 </script>
 
 <style scoped lang="less">
-  @nav-size-height: 60px;
+  @nav-size-height: 52px;
   @layout-max-width: 1100px;
 
   .layout {
@@ -133,6 +140,8 @@
   }
 
   .menu-wrapper {
+    display: flex;
+    flex-direction: column;
     height: 100%;
     overflow: auto;
     overflow-x: hidden;
@@ -160,5 +169,25 @@
     overflow-y: hidden;
     background-color: var(--color-fill-2);
     transition: padding 0.2s cubic-bezier(0.34, 0.69, 0.1, 1);
+  }
+
+  // TODO logo
+  .layout-logo {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: 100%;
+    height: @nav-size-height;
+    background-position: 0 center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    transition: 200ms;
+
+    &.collapsed {
+      background-size: 150px auto;
+      background-position: -15px center;
+    }
   }
 </style>

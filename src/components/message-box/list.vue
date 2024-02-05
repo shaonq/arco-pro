@@ -61,9 +61,12 @@
 </template>
 
 <script lang="ts" setup>
+  import { PropType } from 'vue';
+  import { MessageRecord, MessageListType } from '@/api/message';
+
   const props = defineProps({
     renderList: {
-      type: Array,
+      type: Array as PropType<MessageListType>,
       required: true,
     },
     unreadCount: {
@@ -76,7 +79,7 @@
     emit('itemClick', [...props.renderList]);
   };
 
-  const onItemClick = (item: []) => {
+  const onItemClick = (item: MessageRecord) => {
     if (!item.status) {
       emit('itemClick', [item]);
     }

@@ -41,10 +41,12 @@
 </template>
 
 <script lang="ts" setup>
+  import { queryInspectionList, ServiceRecord } from '@/api/list';
   import useRequest from '@/hooks/request';
   import CardWrap from './card-wrap.vue';
 
-  const defaultValue: any[] = new Array(3).fill({});
+  const defaultValue: ServiceRecord[] = new Array(3).fill({});
+  const { loading, data: renderData } = useRequest<ServiceRecord[]>(queryInspectionList as any, defaultValue);
 </script>
 
 <style scoped lang="less">

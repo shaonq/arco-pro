@@ -73,10 +73,11 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import { FormInstance } from '@arco-design/web-vue/es/form';
+  import { BaseInfoModel } from '@/api/form';
 
   const emits = defineEmits(['changeStep']);
   const formRef = ref<FormInstance>();
-  const formData = ref({
+  const formData = ref<BaseInfoModel>({
     activityName: '',
     channelType: '',
     promotionTime: [],

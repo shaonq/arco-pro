@@ -1,5 +1,6 @@
-export type RoleType = '' | '*' | 'admin' | 'user';
-export interface UserState {
+/** 用户角色 ： '' | '*' | 'admin' | 'user' */
+export type RoleType = '' | '*' | 'admin' | 'user' | string;
+export interface UserState extends Record<string, any> {
   name?: string;
   avatar?: string;
   job?: string;
@@ -15,5 +16,5 @@ export interface UserState {
   registrationDate?: string;
   accountId?: string;
   certification?: number;
-  role: RoleType;
+  role: RoleType | RoleType[];
 }

@@ -26,6 +26,7 @@
         },
       });
 
+      const topMenu = computed(() => appStore.topMenu);
       const openKeys = ref<string[]>([]);
       const selectedKey = ref<string[]>([]);
 
@@ -47,24 +48,24 @@
           name: item.name,
         });
       };
-      const findMenuOpenKeys = (name: string) => {
+      const findMenuOpenKeys = (target: string) => {
         const result: string[] = [];
         let isFind = false;
-        const backtrack = (item: RouteRecordRaw, keys: string[], target: string) => {
+        const backtrack = (item: RouteRecordRaw, keys: string[]) => {
           if (item.name === target) {
             isFind = true;
-            result.push(...keys, item.name as string);
+            result.push(...keys);
             return;
           }
           if (item.children?.length) {
             item.children.forEach((el) => {
-              backtrack(el, [...keys], target);
+              backtrack(el, [...keys, el.name as string]);
             });
           }
         };
         menuTree.value.forEach((el: RouteRecordRaw) => {
           if (isFind) return; // Performance optimization
-          backtrack(el, [el.name as string], name);
+          backtrack(el, [el.name as string]);
         });
         return result;
       };
@@ -91,13 +92,7 @@
               const icon = element?.meta?.icon ? () => h(compile(`<${element?.meta?.icon}/>`)) : null;
               const node =
                 element?.children && element?.children.length !== 0 ? (
-                  <a-sub-menu
-                    key={element?.name}
-                    v-slots={{
-                      icon,
-                      title: () => h(compile(t(element?.meta?.locale || ''))),
-                    }}
-                  >
+                  <a-sub-menu key={element?.name} v-slots={{ icon, title: () => h(compile(t(element?.meta?.locale || ''))) }}>
                     {travel(element?.children)}
                   </a-sub-menu>
                 ) : (
@@ -116,6 +111,7 @@
       return () => (
         <a-menu
           class="layout-menu"
+          mode={topMenu.value ? 'horizontal' : 'vertical'}
           v-model:collapsed={collapsed.value}
           v-model:open-keys={openKeys.value}
           show-collapse-button={appStore.device !== 'mobile'}
@@ -123,7 +119,7 @@
           selected-keys={selectedKey.value}
           auto-open-selected={true}
           level-indent={34}
-          style="height: 100%"
+          style="height: 100%;width:100%;"
           onCollapse={setCollapse}
         >
           {renderSubMenu()}

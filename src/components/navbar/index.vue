@@ -1,27 +1,24 @@
 <template>
-  <div class="layout-navbar">
-    <div class="layout-left-side layout-logo" :style="{ width: menuWidth + 'px' }">
-      <a-space>
-        <div>
-          <icon-home v-if="collapsed" class="layout-logo__icon-logo" />
-          <!-- <LogoSvg v-else /> -->
-          <!-- @TODO: 修改logo -->
-          <div v-else>LOGO</div>
-        </div>
-        <icon-menu-fold v-if="appStore.device === 'mobile'" style="font-size: 22px; cursor: pointer" @click="toggleDrawerMenu" />
-      </a-space>
+  <div class="navbar">
+    <!-- <div class="left-side" ></div> -->
+    <div class="center-side">
+      <!-- <Menu v-if="topMenu" /> -->
+      <div
+        style="
+          height: 100%;
+          position: relative;
+          display: flex;
+          align-items: center;
+          padding: 0 16px;
+          box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08) inset;
+          font-size: 18px;
+          font-weight: 600;
+        "
+        >后台管理平台</div
+      >
     </div>
-    <h1 class="layout-app-name">后台管理系统</h1>
-    <ul class="layout-right-side">
-      <li>
-        <a-tooltip :content="$t('settings.search')">
-          <a-button class="nav-btn" type="outline" :shape="'circle'">
-            <template #icon>
-              <icon-search />
-            </template>
-          </a-button>
-        </a-tooltip>
-      </li>
+    <ul class="right-side">
+      <!-- <li> <a-tooltip :content="$t('settings.search')"> <a-button class="nav-btn" type="outline" :shape="'circle'"> <template #icon> <icon-search /> </template> </a-button> </a-tooltip> </li> -->
       <li>
         <a-tooltip :content="$t('settings.language')">
           <a-button class="nav-btn" type="outline" :shape="'circle'" @click="setDropDownVisible">
@@ -30,10 +27,13 @@
             </template>
           </a-button>
         </a-tooltip>
-        <a-dropdown trigger="click" @select="changeLocale">
+        <a-dropdown trigger="click" @select="changeLocale as any">
           <div ref="triggerBtn" class="trigger-btn"></div>
           <template #content>
             <a-doption v-for="item in locales" :key="item.value" :value="item.value">
+              <template #icon>
+                <icon-check v-show="item.value === currentLocale" />
+              </template>
               {{ item.label }}
             </a-doption>
           </template>
@@ -76,6 +76,7 @@
           </a-button>
         </a-tooltip>
       </li>
+      <!-- <li> <a-tooltip :content="$t('settings.title')"> <a-button class="nav-btn" type="outline" :shape="'circle'" @click="setVisible"> <template #icon> <icon-settings /> </template> </a-button> </a-tooltip> </li> -->
       <li>
         <a-dropdown trigger="click">
           <a-avatar :size="32" :style="{ marginRight: '8px', cursor: 'pointer' }">
@@ -84,10 +85,7 @@
           <template #content>
             <a-doption>
               <a-space @click="switchRoles">
-                <icon-tag />
-                <span>
-                  {{ $t('messageBox.switchRoles') }}
-                </span>
+                <icon-tag /><span> {{ $t('messageBox.switchRoles') }} </span>
               </a-space>
             </a-doption>
             <a-doption>
@@ -98,14 +96,7 @@
                 </span>
               </a-space>
             </a-doption>
-            <a-doption>
-              <a-space @click="$router.push({ name: 'Setting' })">
-                <icon-settings />
-                <span>
-                  {{ $t('messageBox.userSettings') }}
-                </span>
-              </a-space>
-            </a-doption>
+            <!-- <a-doption> <a-space @click="$router.push({ name: 'Setting' })"> <icon-settings /> <span> {{ $t('messageBox.userSettings') }} </span> </a-space> </a-doption> -->
             <a-doption>
               <a-space @click="handleLogout">
                 <icon-export />
@@ -123,25 +114,28 @@
 
 <script lang="ts" setup>
   import { computed, ref, inject } from 'vue';
-  import { Message } from '@arco-design/web-vue';
+  import { Message } from '@/hooks/arco';
   import { useDark, useToggle, useFullscreen } from '@vueuse/core';
   import { useAppStore, useUserStore } from '@/store';
   import { LOCALE_OPTIONS } from '@/locale';
   import useLocale from '@/hooks/locale';
   import useUser from '@/hooks/user';
+  // import Menu from '@/components/menu/index.vue';
   import MessageBox from '../message-box/index.vue';
-  import LogoSvg from '../../assets/logo.svg';
 
   const appStore = useAppStore();
   const userStore = useUserStore();
   const { logout } = useUser();
-  const { changeLocale } = useLocale();
+  const { changeLocale, currentLocale } = useLocale();
   const { isFullscreen, toggle: toggleFullScreen } = useFullscreen();
   const locales = [...LOCALE_OPTIONS];
-  const avatar = computed(() => userStore.avatar);
-  const menuWidth = computed(() => (appStore.menuCollapse ? 48 : appStore.menuWidth));
-  const collapsed = computed(() => appStore.menuCollapse);
-  const theme = computed(() => appStore.theme);
+  const avatar = computed(() => {
+    return userStore.avatar;
+  });
+  const theme = computed(() => {
+    return appStore.theme;
+  });
+  // const topMenu = computed(() => appStore.topMenu && appStore.menu);
   const isDark = useDark({
     selector: 'body',
     attribute: 'arco-theme',
@@ -157,9 +151,7 @@
   const handleToggleTheme = () => {
     toggleTheme();
   };
-  const setVisible = () => {
-    appStore.updateSettings({ globalSettings: true });
-  };
+  // const setVisible = () => { appStore.updateSettings({ globalSettings: true }); };
   const refBtn = ref();
   const triggerBtn = ref();
   const setPopoverVisible = () => {
@@ -185,11 +177,12 @@
     const res = await userStore.switchRoles();
     Message.success(res as string);
   };
-  const toggleDrawerMenu = inject('toggleDrawerMenu');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const toggleDrawerMenu = inject('toggleDrawerMenu') as () => void;
 </script>
 
 <style scoped lang="less">
-  .layout-navbar {
+  .navbar {
     display: flex;
     justify-content: space-between;
     height: 100%;
@@ -197,20 +190,17 @@
     border-bottom: 1px solid var(--color-border);
   }
 
-  .layout-left-side {
+  .left-side {
     display: flex;
-    flex-wrap: wrap;
-    align-content: center;
-    justify-content: center;
+    align-items: center;
+    padding-left: 20px;
   }
-  .layout-app-name {
+
+  .center-side {
     flex: 1;
-    margin: 0 20px;
-    line-height: 60px;
-    font-size: 24px;
-    font-weight: 500;
   }
-  .layout-right-side {
+
+  .right-side {
     display: flex;
     padding-right: 20px;
     list-style: none;
@@ -241,9 +231,78 @@
       margin-left: 14px;
     }
   }
+</style>
+
+<style lang="less">
   .message-popover {
     .arco-popover-content {
       margin-top: 0;
+    }
+  }
+</style>
+
+<style lang="less">
+  &:not([arco-theme='dark']) {
+    /** edit arco-menu-light   */
+    --u-theme-color: #00163a;
+    --u-theme-sub-color: #00081a;
+    --u-theme-menu-light-bg: #10164e;
+    .layout-logo {
+      background-color: var(--u-theme-menu-light-bg);
+    }
+    // menu style change
+    .arco-menu-light.layout-menu {
+      .arco-menu-inline-header,
+      .arco-menu-inline,
+      .arco-menu-item {
+        background-color: var(--u-theme-menu-light-bg);
+        line-height: 36px;
+        font-size: 13px;
+        color: #fff;
+      }
+
+      background: var(--u-theme-color);
+
+      .arco-menu-inline-content {
+        background: var(--u-theme-sub-color);
+      }
+      // default text color
+      .arco-menu-inline-header,
+      .arco-menu-icon svg,
+      .arco-menu-icon-suffix svg,
+      .arco-menu-item {
+        color: rgba(#fff, 0.65);
+        font-weight: 500;
+        background: transparent;
+        transition: 300ms;
+      }
+      // hover
+      .arco-menu-inline-header:hover,
+      .arco-menu-item:hover {
+        background: rgba(#fff, 0.1);
+      }
+
+      // selected
+      .arco-menu-inline-header.arco-menu-selected {
+        &,
+        .arco-menu-icon svg,
+        .arco-menu-icon-suffix svg {
+          color: rgba(#fff, 0.9);
+        }
+      }
+
+      .arco-menu-item.arco-menu-selected {
+        color: rgba(#fff, 1);
+        background: rgb(var(--primary-6));
+      }
+
+      .arco-menu-collapse-button,
+      .arco-menu-pop {
+        background: transparent;
+      }
+      .arco-menu-inner .arco-icon:not(.arco-icon-down) {
+        font-size: 16px;
+      }
     }
   }
 </style>

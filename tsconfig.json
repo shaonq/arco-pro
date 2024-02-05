@@ -9,12 +9,11 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    },
+    "paths": { "@/*": ["src/*"] },
     "lib": ["es2020", "dom"],
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "noImplicitAny": false
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "include": ["src/**/*", "src/**/*.vue"],
   "exclude": ["node_modules"]
 }

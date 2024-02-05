@@ -5,9 +5,9 @@
 </template>
 
 <script lang="ts" setup>
-  import useChartOption from '@/hooks/chart';
+  import useChartOption from '@/hooks/chart-option';
 
-  const  chartOption = useChartOption((isDark) => {
+  const { chartOption } = useChartOption((isDark) => {
     return {
       grid: {
         left: 44,

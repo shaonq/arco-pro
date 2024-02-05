@@ -2,6 +2,7 @@ import localeMessageBox from '@/components/message-box/locale/en-US';
 import localeLogin from '@/views/login/locale/en-US';
 
 import localeWorkplace from '@/views/dashboard/workplace/locale/en-US';
+/** simple */
 
 import localeSearchTable from '@/views/list/search-table/locale/en-US';
 import localeCardList from '@/views/list/card/locale/en-US';
@@ -30,7 +31,6 @@ export default {
   'menu.dashboard': 'Dashboard',
   'menu.server.dashboard': 'Dashboard-Server',
   'menu.server.workplace': 'Workplace-Server',
-  'menu.server.monitor': 'Monitor-Server',
   'menu.list': 'List',
   'menu.result': 'Result',
   'menu.exception': 'Exception',

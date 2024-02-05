@@ -21,10 +21,11 @@
   import { computed, ref } from 'vue';
   import { useI18n } from 'vue-i18n';
   import { LineSeriesOption } from 'echarts';
+  import { queryDataOverview } from '@/api/visualization';
   import useLoading from '@/hooks/loading';
   import { ToolTipFormatterParams } from '@/types/echarts';
   import useThemes from '@/hooks/themes';
-  import useChartOption from '@/hooks/chart';
+  import useChartOption from '@/hooks/chart-option';
 
   const tooltipItemsHtmlString = (items: ToolTipFormatterParams[]) => {
     return items
@@ -117,7 +118,7 @@
   const contentClickData = ref<number[]>([]);
   const contentExposureData = ref<number[]>([]);
   const activeUsersData = ref<number[]>([]);
-  const chartOption = useChartOption((dark) => {
+  const { chartOption } = useChartOption((dark) => {
     return {
       grid: {
         left: '2.6%',
@@ -210,24 +211,35 @@
         ],
       },
       series: [
-        generateSeries('活跃用户数', '#722ED1', '#F5E8FF', contentProductionData.value),
-        generateSeries('内容生产量', '#F77234', '#FFE4BA', contentClickData.value),
-        generateSeries('内容点击量', '#33D1C9', '#E8FFFB', contentExposureData.value),
-        generateSeries('内容曝光量', '#3469FF', '#E8F3FF', activeUsersData.value),
+        generateSeries('内容生产量', '#722ED1', '#F5E8FF', contentProductionData.value),
+        generateSeries('内容点击量', '#F77234', '#FFE4BA', contentClickData.value),
+        generateSeries('内容曝光量', '#33D1C9', '#E8FFFB', contentExposureData.value),
+        generateSeries('活跃用户数', '#3469FF', '#E8F3FF', activeUsersData.value),
       ],
     };
   });
-  const dataInit = async () => {
+  const fetchData = async () => {
     setLoading(true);
     try {
-      /** */
+      const { data } = await queryDataOverview();
+      xAxis.value = data.xAxis;
+      data.data.forEach((el) => {
+        if (el.name === '内容生产量') {
+          contentProductionData.value = el.value;
+        } else if (el.name === '内容点击量') {
+          contentClickData.value = el.value;
+        } else if (el.name === '内容曝光量') {
+          contentExposureData.value = el.value;
+        }
+        activeUsersData.value = el.value;
+      });
     } catch (err) {
       // you can report use errorHandler or other
     } finally {
       setLoading(false);
     }
   };
-  dataInit();
+  fetchData();
 </script>
 
 <style scoped lang="less">

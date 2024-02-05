@@ -19,7 +19,8 @@
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
   import useLoading from '@/hooks/loading';
-  import useChartOption from '@/hooks/chart';
+  import { queryDataChainGrowth, DataChainGrowth } from '@/api/visualization';
+  import useChartOption from '@/hooks/chart-option';
 
   const props = defineProps({
     title: {
@@ -40,7 +41,7 @@
   const growth = ref(100);
   const isUp = computed(() => growth.value > 50);
   const chartData = ref<any>([]);
-  const chartOption = useChartOption(() => {
+  const { chartOption } = useChartOption(() => {
     return {
       grid: {
         left: 0,
@@ -81,8 +82,31 @@
       ],
     };
   });
-  const dataInit = async (params) => {};
-  dataInit({ quota: props.quota });
+  const fetchData = async (params: DataChainGrowth) => {
+    try {
+      const { data } = await queryDataChainGrowth(params);
+      const { chartData: resChartData } = data;
+      count.value = data.count;
+      growth.value = data.growth;
+      resChartData.data.value.forEach((el, idx) => {
+        if (props.chartType === 'bar') {
+          chartData.value.push({
+            value: el,
+            itemStyle: {
+              color: idx % 2 ? '#468DFF' : '#86DF6C',
+            },
+          });
+        } else {
+          chartData.value.push(el);
+        }
+      });
+    } catch (err) {
+      // you can report use errorHandler or other
+    } finally {
+      setLoading(false);
+    }
+  };
+  fetchData({ quota: props.quota });
 </script>
 
 <style scoped lang="less">

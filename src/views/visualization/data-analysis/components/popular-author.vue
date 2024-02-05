@@ -36,19 +36,22 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import useLoading from '@/hooks/loading';
+  import { queryPopularAuthor, PopularAuthorRes } from '@/api/visualization';
 
   const { loading, setLoading } = useLoading();
-  const tableData = ref({ list: [] });
-  const dataInit = async () => {
+  const tableData = ref<PopularAuthorRes>({ list: [] });
+  const fetchData = async () => {
     try {
-      /** */
+      setLoading(true);
+      const { data } = await queryPopularAuthor();
+      tableData.value = data;
     } catch (err) {
       // you can report use errorHandler or other
     } finally {
       setLoading(false);
     }
   };
-  dataInit();
+  fetchData();
 </script>
 
 <style scoped lang="less">

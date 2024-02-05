@@ -28,6 +28,7 @@
 <script lang="ts" setup>
   import { computed, PropType } from 'vue';
   import { useI18n } from 'vue-i18n';
+  import { ProfileBasicRes } from '@/api/profile';
 
   type BlockList = {
     title: string;
@@ -43,7 +44,7 @@
       default: '',
     },
     renderData: {
-      type: Object,
+      type: Object as PropType<ProfileBasicRes>,
       required: true,
     },
     loading: {
@@ -54,7 +55,7 @@
   const { t } = useI18n();
   const blockDataList = computed<BlockList>(() => {
     const { renderData } = props;
-    const result = [];
+    const result: any = [];
     result.push({
       title: props.type === 'pre' ? t('basicProfile.title.preVideo') : t('basicProfile.title.video'),
       data: [

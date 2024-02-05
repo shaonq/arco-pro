@@ -22,6 +22,7 @@
 <script lang="ts" setup>
   import { ref, reactive, toRefs, computed } from 'vue';
   import { useI18n } from 'vue-i18n';
+  import { queryMessageList, setMessageStatus, MessageRecord, MessageListType } from '@/api/message';
   import useLoading from '@/hooks/loading';
   import List from './list.vue';
 
@@ -33,28 +34,43 @@
   const { loading, setLoading } = useLoading(true);
   const messageType = ref('message');
   const { t } = useI18n();
-  const messageData = reactive<{ renderList: any[]; messageList: any[] }>({ renderList: [], messageList: [] });
+  const messageData = reactive<{
+    renderList: MessageRecord[];
+    messageList: MessageRecord[];
+  }>({
+    renderList: [],
+    messageList: [],
+  });
   toRefs(messageData);
   const tabList: TabItem[] = [
-    { key: 'message', title: t('messageBox.tab.title.message') },
-    { key: 'notice', title: t('messageBox.tab.title.notice') },
-    { key: 'todo', title: t('messageBox.tab.title.todo') },
+    {
+      key: 'message',
+      title: t('messageBox.tab.title.message'),
+    },
+    {
+      key: 'notice',
+      title: t('messageBox.tab.title.notice'),
+    },
+    {
+      key: 'todo',
+      title: t('messageBox.tab.title.todo'),
+    },
   ];
   async function fetchSourceData() {
     setLoading(true);
     try {
-      /** */
+      const { data } = await queryMessageList();
+      messageData.messageList = data;
     } catch (err) {
       // you can report use errorHandler or other
     } finally {
       setLoading(false);
     }
   }
-  async function readMessage(data: any[]) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async function readMessage(data: MessageListType) {
     const ids = data.map((item) => item.id);
-    // await setMessageStatus({ ids });
-    // fetchSourceData();
+    await setMessageStatus({ ids });
+    fetchSourceData();
   }
   const renderList = computed(() => {
     return messageData.messageList.filter((item) => messageType.value === item.type);
@@ -70,7 +86,7 @@
     const list = getUnreadList(type);
     return list.length ? `(${list.length})` : ``;
   };
-  const handleItemClick = (items: any[]) => {
+  const handleItemClick = (items: MessageListType) => {
     if (renderList.value.length) readMessage([...items]);
   };
   const emptyList = () => {

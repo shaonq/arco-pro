@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { useDebounceFn } from '@vueuse/core';
 import { Message, Modal } from '@/hooks/arco';
 import { getToken, clearToken } from '@/utils/auth';
 
@@ -13,9 +14,13 @@ export { AxiosRequestConfig, AxiosResponse };
 
 const errorMessageTimeout = 5 * 1000;
 
+// console.log(import.meta.env.VITE_API_BASE_URL,'地址')
+export const baseURL = import.meta.env.VITE_API_BASE_URL || '/';
 const instance = axios.create({
-  baseURL: '/',
-  timeout: 1e4,
+  // baseURL: '/',
+  baseURL,
+  // 请在单独接口上配置超时
+  timeout: 10 * 1000,
   // withCredentials: true, // 表示跨域请求时是否需要使用凭证
 });
 
@@ -41,33 +46,44 @@ instance.interceptors.request.use(
   }
 );
 
+// debounce logout exit message
+const openLogOutExitMessageBox = useDebounceFn(() => {
+  Modal.error({
+    title: '登录超时',
+    content: '登录已失效,点击下方按钮重新登录',
+    okText: '重新登录',
+    async onOk() {
+      clearToken();
+      // window.location.reload();
+      window.location.href = '/';
+    },
+  });
+}, 1000);
 // logout
 function logOutExit(response: AxiosResponse<HttpResponse>) {
   // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
-  const logoutCodes = [400];
-  if (logoutCodes.includes(Number(response.data.code)) && response.config.url !== '/api/user/info') {
-    Modal.error({
-      title: 'Confirm logout',
-      content: 'You have been logged out, you can cancel to stay on this page, or log in again',
-      okText: 'Re-Login',
-      async onOk() {
-        clearToken();
-        window.location.reload();
-      },
-    });
+  const logoutCodes = [50008, 50012, 50014]; // , 400, 500
+  // console.log(response.config.url);
+  if (logoutCodes.includes(Number(response.data.code)) && response.config.url !== '/oss-user-center/login') {
+    openLogOutExitMessageBox();
+    return true;
   }
+  return false;
 }
 
 // add response interceptors
 instance.interceptors.response.use(
   (response: AxiosResponse<HttpResponse>) => {
     const res = response.data;
-    // if the custom code is not 200, it is judged as an error.
+    const errMessage = res.message || 'Error';
     // logout
-    logOutExit(response);
+    if (logOutExit(response)) {
+      return Promise.reject(new Error(errMessage));
+    }
+    // if the custom code is not 200, it is judged as an error.
     if (res.code !== '200') {
-      Message.error({ content: res.message || 'Error', duration: errorMessageTimeout });
-      return Promise.reject(new Error(res.message || 'Error'));
+      Message.error({ content: errMessage, duration: errorMessageTimeout });
+      return Promise.reject(new Error(errMessage));
     }
     return res;
   },

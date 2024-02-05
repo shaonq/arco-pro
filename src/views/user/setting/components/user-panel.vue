@@ -48,6 +48,7 @@
   import { ref } from 'vue';
   import type { FileItem, RequestOption } from '@arco-design/web-vue/es/upload/interfaces';
   import { useUserStore } from '@/store';
+  import { userUploadApi } from '@/api/user-center';
   import type { DescData } from '@arco-design/web-vue/es/descriptions/interface';
 
   const userStore = useUserStore();
@@ -102,6 +103,12 @@
       try {
         // https://github.com/axios/axios/issues/1630
         // https://github.com/nuysoft/Mock/issues/127
+
+        const res = await userUploadApi(formData, {
+          controller,
+          onUploadProgress,
+        });
+        onSuccess(res);
       } catch (error) {
         onError(error);
       }
